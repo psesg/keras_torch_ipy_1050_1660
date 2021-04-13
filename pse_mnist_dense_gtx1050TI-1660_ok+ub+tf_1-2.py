@@ -3,8 +3,11 @@ import tensorflow as tf
 def setup_tf_GPU (str_tf_ver):
     MajorTFver = int(str(str_tf_ver).split('.', 3)[0])
     if MajorTFver >= 2:
-        gpus = tf.config.experimental.list_physical_devices('GPU')
-        tf.config.experimental.set_memory_growth(gpus[0], True)
+        gpu = tf.config.experimental.list_physical_devices('GPU') #'GPU'
+        for i in range(0, len(gpu)):
+            print(gpu[i])
+            #gpus = tf.config.experimental.list_physical_devices('GPU')
+            tf.config.experimental.set_memory_growth(gpu[i], True)
         #print(gpus[0])
         # or another way setup
         #config = tf.compat.v1.ConfigProto()
@@ -86,7 +89,8 @@ model.compile(loss="categorical_crossentropy", optimizer="SGD", metrics=["accura
 print(model.summary())
 
 # Обучаем сеть
-model.fit(X_train, Y_train, batch_size=200, epochs=10, validation_split=0.2, verbose=2)
+with tf.device('/GPU:0'):
+    model.fit(X_train, Y_train, batch_size=200, epochs=10, validation_split=0.2, verbose=2)
 
 # Оцениваем качество обучения сети на тестовых данных
 scores = model.evaluate(X_test, Y_test, verbose=0)
