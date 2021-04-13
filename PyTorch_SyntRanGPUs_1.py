@@ -14,7 +14,10 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 if torch.cuda.is_available():
     print("cuda version = ",torch.version.cuda)
-    print("torch version = ",torch.__version__, "\ntorch.cuda.get_device_properties(0) = ", torch.cuda.get_device_properties(0))
+    print('available devices ', torch.cuda.device_count())
+    print("torch version = ",torch.__version__)
+    for i in range(0, torch.cuda.device_count()):
+        print("torch.cuda.get_device_properties({}) = '{}'".format(i, torch.cuda.get_device_properties(i)) )
 
 class RandomDataset(Dataset):
 
