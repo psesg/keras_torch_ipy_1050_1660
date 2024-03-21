@@ -6,9 +6,16 @@ def setup_tf_GPU (str_tf_ver):
         gpu = tf.config.experimental.list_physical_devices('GPU') #'GPU'
         for i in range(0, len(gpu)):
             print(gpu[i])
+            details = tf.config.experimental.get_device_details(gpu[i])
+            device_name = details.get('device_name', 'Unknown GPU')
+            print(f'device name: {device_name}')
+            compute_capability = details.get('compute_capability', 'Unknown')
+            print(f'compute capability: {compute_capability[0]}.{compute_capability[1]}')
+
             #gpus = tf.config.experimental.list_physical_devices('GPU')
             tf.config.experimental.set_memory_growth(gpu[i], True)
-        #print(gpus[0])
+        # print(gpu[0])
+
         # or another way setup
         #config = tf.compat.v1.ConfigProto()
         #config.gpu_options.allow_growth = True
