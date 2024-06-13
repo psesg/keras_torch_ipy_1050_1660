@@ -11,17 +11,18 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import tensorflow as tf
 import numpy
 # from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
+# from keras.layers import Dense, Dropout, Flatten
+# from keras.layers import Conv2D, MaxPooling2D
 # from keras.utils import np_utils
 from keras import utils
 
 
-def setup_tf_GPU (str_tf_ver):
-    MajorTFver = int(str(str_tf_ver).split('.', 3)[0])
-    if MajorTFver >= 2:
-        gpu = tf.config.experimental.list_physical_devices('GPU') #'GPU'
+def setup_tf_gpu(str_tf_ver):
+    major_tf_ver = int(str(str_tf_ver).split('.', 3)[0])
+    if major_tf_ver >= 2:
+        gpu = tf.config.experimental.list_physical_devices('GPU')
         for i in range(0, len(gpu)):
             print(gpu[i])
             details = tf.config.experimental.get_device_details(gpu[i])
@@ -35,17 +36,17 @@ def setup_tf_GPU (str_tf_ver):
         config.gpu_options.allow_growth = True
         config.gpu_options.per_process_gpu_memory_fraction = 0.8
         tf.keras.backend.set_session(tf.Session(config=config))
-    print('tensorflow v.=', str_tf_ver, ' configurated for major v.=', MajorTFver)
+    print('tensorflow v.=', str_tf_ver, ' configurated for major v.=', major_tf_ver)
 
-setup_tf_GPU(tf.__version__)
 
+setup_tf_gpu(tf.__version__)
 
 # Устанавливаем seed для повторяемости результатов
 numpy.random.seed(42)
 
 # Размер изображения
 img_rows, img_cols = 28, 28
-#
+
 # Загружаем данные
 #(X_train, y_train), (X_test, y_test) = mnist.load_data()
 
