@@ -1,4 +1,5 @@
 import os
+
 # for Tensorflow Suppressing Warning messages
 ''' TF_CPP_MIN_LOG_LEVEL
 0 = all messages are logged (default behavior)
@@ -6,7 +7,16 @@ import os
 2 = INFO and WARNING messages are not printed
 3 = INFO, WARNING, and ERROR messages are not printed '''
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 import tensorflow as tf
+import numpy
+# from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+# from keras.utils import np_utils
+from keras import utils
+
 
 def setup_tf_GPU (str_tf_ver):
     MajorTFver = int(str(str_tf_ver).split('.', 3)[0])
@@ -19,16 +29,7 @@ def setup_tf_GPU (str_tf_ver):
             print(f'device name: {device_name}')
             compute_capability = details.get('compute_capability', 'Unknown')
             print(f'compute capability: {compute_capability[0]}.{compute_capability[1]}')
-
-            #gpus = tf.config.experimental.list_physical_devices('GPU')
             tf.config.experimental.set_memory_growth(gpu[i], True)
-        # print(gpu[0])
-
-        # or another way setup
-        #config = tf.compat.v1.ConfigProto()
-        #config.gpu_options.allow_growth = True
-        #config.gpu_options.per_process_gpu_memory_fraction = 0.8
-        #tf.compat.v1.keras.backend.set_session(tf.compat.v1.Session(config=config))
     else:
         config = tf.ConfigProto()
         config.gpu_options.allow_growth = True
@@ -38,12 +39,6 @@ def setup_tf_GPU (str_tf_ver):
 
 setup_tf_GPU(tf.__version__)
 
-import numpy
-from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D
-from keras.utils import np_utils
 
 # Устанавливаем seed для повторяемости результатов
 numpy.random.seed(42)
@@ -78,8 +73,8 @@ X_train /= 255
 X_test /= 255
 
 # Преобразуем метки в категории
-Y_train = np_utils.to_categorical(y_train, 10)
-Y_test = np_utils.to_categorical(y_test, 10)
+Y_train = utils.to_categorical(y_train, 10)
+Y_test = utils.to_categorical(y_test, 10)
 
 # Создаем последовательную модель
 model = Sequential()
