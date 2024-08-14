@@ -1,4 +1,5 @@
 import os
+import subprocess as sp
 
 # for Tensorflow Suppressing Warning messages
 ''' TF_CPP_MIN_LOG_LEVEL
@@ -18,6 +19,11 @@ from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2
 # from keras.utils import np_utils
 from keras import utils
 
+def get_gpu_memory():
+    command = "nvidia-smi --query-gpu=memory.total --format=csv"
+    memory_free_info = sp.check_output(command.split()).decode('ascii').split('\n')[:-1][1:]
+    memory_free_values = [int(x.split()[0]) for i, x in enumerate(memory_free_info)]
+    return memory_free_values
 
 def setup_tf_gpu(str_tf_ver):
     major_tf_ver = int(str(str_tf_ver).split('.', 3)[0])
@@ -30,6 +36,8 @@ def setup_tf_gpu(str_tf_ver):
             print(f'device name: {device_name}')
             compute_capability = details.get('compute_capability', 'Unknown')
             print(f'compute capability: {compute_capability[0]}.{compute_capability[1]}')
+            mem = get_gpu_memory()
+            print(f'device memory: {mem[0]} MB')
             tf.config.experimental.set_memory_growth(gpu[i], True)
     else:
         config = tf.ConfigProto()
