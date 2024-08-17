@@ -10,6 +10,7 @@ import subprocess as sp
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import tensorflow as tf
+from tensorflow.python.platform import build_info as build
 import numpy
 # from keras.datasets import mnist
 from tensorflow.keras import Sequential
@@ -38,6 +39,9 @@ def setup_tf_gpu(str_tf_ver):
             print(f'compute capability: {compute_capability[0]}.{compute_capability[1]}')
             mem = get_gpu_memory()
             print(f'device memory: {mem[0]} MB')
+            print(f"tensorflow version: {tf.__version__}")
+            print(f"Cuda Version: {build.build_info['cuda_version']}")
+            print(f"Cudnn version: {build.build_info['cudnn_version']}")
             tf.config.experimental.set_memory_growth(gpu[i], True)
     else:
         config = tf.ConfigProto()

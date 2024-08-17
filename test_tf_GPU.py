@@ -10,6 +10,8 @@ import subprocess as sp
 3 = INFO, WARNING, and ERROR messages are not printed '''
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
+from tensorflow.python.platform import build_info as build
+
 def get_gpu_memory():
     command = "nvidia-smi --query-gpu=memory.total --format=csv"
     memory_free_info = sp.check_output(command.split()).decode('ascii').split('\n')[:-1][1:]
@@ -27,3 +29,6 @@ for i in range(0, len(gpu)):
     print(f'compute capability: {compute_capability[0]}.{compute_capability[1]}')
     mem = get_gpu_memory()
     print(f'device memory: {mem[0]} MB')
+    print(f"tensorflow version: {tf.__version__}")
+    print(f"Cuda Version: {build.build_info['cuda_version']}")
+    print(f"Cudnn version: {build.build_info['cudnn_version']}")
