@@ -1,5 +1,7 @@
 # python 3.9.7
 # https://www.python.org/downloads/windows/
+# cuda_11.8
+# cudnn 8.6
 tensorflow==2.10.1
 torch==2.6.0+cu118
 numpy==1.26.4
